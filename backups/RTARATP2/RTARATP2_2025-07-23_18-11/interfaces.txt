@@ -1,0 +1,109 @@
+display interface brief
+PHY: Physical
+*down: administratively down
+#down: LBDT down
+(l): loopback
+(s): spoofing
+(E): E-Trunk down
+(b): BFD down
+(e): ETHOAM down
+(dl): DLDP down
+(lb): LBDT block
+(lp): Loop-detect block
+(o): Observe-port forwarding down
+InUti/OutUti: input utility/output utility
+Interface                   PHY   Protocol  InUti OutUti   inErrors  outErrors
+Eth-Trunk2                  up    up       46.51%  2.13%      46949          0
+  100GE0/0/2                up    up       46.51%  2.13%      46949          0
+Eth-Trunk6                  up    up        1.94% 26.78%      63721          0
+  100GE0/0/1                up    up        1.94% 26.78%      63721          0
+Eth-Trunk9                  up    up        0.06% 11.10%          0          0
+  100GE0/0/6                up    up        0.06% 11.10%          0          0
+Eth-Trunk30                 up    down      3.39% 26.92%          0          0
+  XGigabitEthernet0/0/21    up    up        3.39% 26.92%          0          0
+Eth-Trunk30.2               up    up           0%     0%          0          0
+Eth-Trunk30.30              up    up           0%     0%          0          0
+Eth-Trunk30.33              up    up           0%     0%          0          0
+Eth-Trunk30.65              up    up           0%     0%          0          0
+Eth-Trunk30.100             *down down         0%     0%          0          0
+Eth-Trunk30.102             *down down         0%     0%          0          0
+Eth-Trunk30.549             up    up           0%     0%          0          0
+Eth-Trunk30.550             up    up           0%     0%          0          0
+Eth-Trunk30.551             up    up           0%     0%          0          0
+Eth-Trunk30.552             up    up           0%     0%          0          0
+Eth-Trunk30.553             up    up           0%     0%          0          0
+Eth-Trunk30.554             up    up           0%     0%          0          0
+Eth-Trunk30.555             up    up           0%     0%          0          0
+Eth-Trunk30.556             up    up           0%     0%          0          0
+Eth-Trunk30.557             up    up           0%     0%          0          0
+Eth-Trunk30.558             up    up           0%     0%          0          0
+Eth-Trunk30.559             up    up           0%     0%          0          0
+Eth-Trunk30.560             up    up           0%     0%          0          0
+Eth-Trunk30.561             up    up           0%     0%          0          0
+Eth-Trunk30.562             up    up           0%     0%          0          0
+Eth-Trunk30.563             up    up           0%     0%          0          0
+Eth-Trunk30.564             up    up           0%     0%          0          0
+Eth-Trunk30.589             up    up           0%     0%          0          0
+Eth-Trunk30.1000            up    up           0%     0%          0          0
+Eth-Trunk30.1001            up    up           0%     0%          0          0
+Eth-Trunk30.1002            up    up           0%     0%          0          0
+Eth-Trunk30.1003            up    up           0%     0%          0          0
+Eth-Trunk30.1004            up    up           0%     0%          0          0
+Eth-Trunk30.1005            up    up           0%     0%          0          0
+Eth-Trunk30.1006            up    up           0%     0%          0          0
+Eth-Trunk30.1007            up    up           0%     0%          0          0
+Eth-Trunk30.1008            up    up           0%     0%          0          0
+Eth-Trunk30.1009            up    up           0%     0%          0          0
+Eth-Trunk30.1010            up    up           0%     0%          0          0
+Eth-Trunk30.1011            up    up           0%     0%          0          0
+Eth-Trunk30.1012            up    up           0%     0%          0          0
+Eth-Trunk30.1013            up    up           0%     0%          0          0
+Eth-Trunk30.1014            up    up           0%     0%          0          0
+Eth-Trunk30.1016            up    up           0%     0%          0          0
+Eth-Trunk30.1500            up    up           0%     0%          0          0
+Eth-Trunk30.1537            up    up           0%     0%          0          0
+Eth-Trunk30.1538            up    up           0%     0%          0          0
+Eth-Trunk30.1540            up    up           0%     0%          0          0
+Eth-Trunk30.1542            up    up           0%     0%          0          0
+Eth-Trunk30.1543            up    up           0%     0%          0          0
+LoopBack2                   up    up(s)        0%     0%          0          0
+LoopBack100                 up    up(s)        0%     0%          0          0
+MEth0/0/1                   down  down         0%     0%          0          0
+NULL0                       up    up(s)        0%     0%          0          0
+Vlanif1                     up    down         --     --          0          0
+Vlanif4                     up    up           --     --          0          0
+Vlanif41                    up    up           --     --          0          0
+Vlanif65                    down  down         --     --          0          0
+Vlanif678                   down  down         --     --          0          0
+Vlanif1309                  down  down         --     --          0          0
+XGigabitEthernet0/0/1       down  down         0%     0%          0          0
+XGigabitEthernet0/0/2       up    up        1.06%     0%          0          0
+XGigabitEthernet0/0/3       down  down         0%     0%          0          0
+XGigabitEthernet0/0/4       down  down         0%     0%          0          0
+XGigabitEthernet0/0/5       *down down         0%     0%          0          0
+XGigabitEthernet0/0/6       *down down         0%     0%          0          0
+XGigabitEthernet0/0/7       down  down         0%     0%          0          0
+XGigabitEthernet0/0/8       down  down         0%     0%          0          0
+XGigabitEthernet0/0/9       *down down         0%     0%          0          0
+XGigabitEthernet0/0/10      down  down         0%     0%          0          0
+XGigabitEthernet0/0/10.51   down  down         0%     0%          0          0
+XGigabitEthernet0/0/10.850  down  down         0%     0%          0          0
+XGigabitEthernet0/0/11      up    up           0%     0%          0          0
+XGigabitEthernet0/0/12      up    up           0%     0%          0          0
+XGigabitEthernet0/0/13      *down down         0%     0%          0          0
+XGigabitEthernet0/0/14      up    up           0%     0%          4          0
+XGigabitEthernet0/0/14.155  up    up           0%     0%          0          0
+XGigabitEthernet0/0/15      down  down         0%     0%          1          0
+XGigabitEthernet0/0/16      down  down         0%     0%          0          0
+XGigabitEthernet0/0/17      up    up        1.55%  0.06%       1928          0
+XGigabitEthernet0/0/18      down  down         0%     0%          0          0
+XGigabitEthernet0/0/19      up    up        6.60%  0.06%         27          0
+XGigabitEthernet0/0/20      down  down         0%     0%          0          0
+XGigabitEthernet0/0/22      up    up        2.99%  0.05%          0          0
+XGigabitEthernet0/0/23      up    up        0.05%  0.25%          0          0
+XGigabitEthernet0/0/23.23   up    up           0%     0%          0          0
+XGigabitEthernet0/0/24      down  down         0%     0%          0          0
+100GE0/0/3                  up    up           0%     0%          0          0
+100GE0/0/4                  up    up        0.38%  6.42%      56078          0
+100GE0/0/5                  up    up        5.07%  0.12%          0          0
+<rtaratp2>

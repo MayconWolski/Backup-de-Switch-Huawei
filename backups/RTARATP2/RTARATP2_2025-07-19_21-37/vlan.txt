@@ -1,0 +1,25 @@
+display vlan
+The total number of VLANs is: 4
+--------------------------------------------------------------------------------
+U: Up;         D: Down;         TG: Tagged;         UT: Untagged;
+MP: Vlan-mapping;               ST: Vlan-stacking;
+#: ProtocolTransparent-vlan;    *: Management-vlan;
+--------------------------------------------------------------------------------
+
+VID  Type    Ports                                                          
+--------------------------------------------------------------------------------
+1    common  UT:XGE0/0/1(D)     XGE0/0/4(D)     XGE0/0/5(D)     XGE0/0/6(D)     
+                XGE0/0/7(D)     XGE0/0/8(D)     XGE0/0/9(D)     XGE0/0/10(D)    
+                XGE0/0/11(U)    XGE0/0/13(D)    XGE0/0/16(D)    XGE0/0/23(U)    
+                XGE0/0/24(D)                                                    
+4    common  TG:XGE0/0/23(U)                                                    
+41   common  UT:XGE0/0/19(U)    XGE0/0/20(D)    XGE0/0/22(U)                    
+678  common  
+
+VID  Status  Property      MAC-LRN Statistics Description      
+--------------------------------------------------------------------------------
+1    enable  default       enable  disable    VLAN 0001                         
+4    enable  default       enable  disable    VLAN 0004                         
+41   enable  default       enable  disable    VLAN 0041                         
+678  enable  default       enable  disable    VLAN 0678                         
+<rtaratp2>
