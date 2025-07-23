@@ -10,11 +10,11 @@ import threading
 import queue
 import subprocess
 import platform
+import difflib
 
 EQUIPAMENTOS_FILE = "equipamentos.json"
 BACKUP_DIR = "backups"
 
-# === COMANDOS PADRÃO PARA BACKUP ===
 COMANDOS = {
     "current_config": "display current-configuration",
     "vlan": "display vlan",
@@ -53,7 +53,6 @@ def salvar_equipamento(nome, ip, usuario, senha):
 
 def atualizar_lista():
     equipamentos = carregar_equipamentos()
-    print(f"Equipamentos carregados: {equipamentos}")  # DEBUG no console
     lista.delete(0, tk.END)
     for eq in equipamentos:
         lista.insert(tk.END, f"{eq['nome']} - {eq['ip']} ({eq['usuario']})")
@@ -70,7 +69,7 @@ def abrir_cadastro(equip=None):
 
         equipamentos = carregar_equipamentos()
 
-        if equip:  # editar
+        if equip:
             for e in equipamentos:
                 if e["nome"] == equip["nome"]:
                     e["nome"] = nome
@@ -80,8 +79,7 @@ def abrir_cadastro(equip=None):
                         e["senha"] = criptografar(senha)
                     break
             messagebox.showinfo("Sucesso", "Equipamento editado com sucesso!")
-        else:  # novo
-            # Verifica duplicidade pelo nome
+        else:
             nomes = [e["nome"] for e in equipamentos]
             if nome in nomes:
                 messagebox.showerror("Erro", "Já existe equipamento com este nome!")
@@ -235,6 +233,18 @@ def abrir_log_backup(equip):
 
     atualizar_log()
 
+def abrir_backup(arquivo_path):
+    sistema = platform.system()
+    try:
+        if sistema == "Windows":
+            os.startfile(arquivo_path)
+        elif sistema == "Darwin":
+            subprocess.run(["open", arquivo_path])
+        else:
+            subprocess.run(["xdg-open", arquivo_path])
+    except Exception as e:
+        messagebox.showerror("Erro", f"Erro ao abrir arquivo: {e}")
+
 def exibir_backups():
     selected = lista.curselection()
     if not selected:
@@ -269,17 +279,67 @@ def exibir_backups():
         lb.insert(tk.END, b)
     lb.bind("<Double-1>", abrir_selecionado)
 
-def abrir_backup(arquivo_path):
-    sistema = platform.system()
-    try:
-        if sistema == "Windows":
-            os.startfile(arquivo_path)
-        elif sistema == "Darwin":  # macOS
-            subprocess.run(["open", arquivo_path])
-        else:  # Linux
-            subprocess.run(["xdg-open", arquivo_path])
-    except Exception as e:
-        messagebox.showerror("Erro", f"Erro ao abrir arquivo: {e}")
+def comparar_backups_selecionado():
+    selected = lista.curselection()
+    if not selected:
+        messagebox.showwarning("Atenção", "Selecione um equipamento!")
+        return
+    equipamento = carregar_equipamentos()[selected[0]]
+    nome_equipamento = equipamento["nome"]
+    comparar_backups_equipamento(nome_equipamento)
+
+def comparar_backups_equipamento(nome_equip):
+    pasta_equip = os.path.join(BACKUP_DIR, nome_equip)
+    if not os.path.exists(pasta_equip):
+        messagebox.showerror("Erro", f"Nenhum backup encontrado para {nome_equip}")
+        return
+
+    pastas = sorted([p for p in os.listdir(pasta_equip) if os.path.isdir(os.path.join(pasta_equip, p))], reverse=True)
+    if len(pastas) < 2:
+        messagebox.showwarning("Aviso", "São necessários pelo menos 2 backups para comparar.")
+        return
+
+    pasta_nova = os.path.join(pasta_equip, pastas[0])
+    pasta_antiga = os.path.join(pasta_equip, pastas[1])
+
+    arquivos = os.listdir(pasta_nova)
+
+    janela_diff = tk.Toplevel(root)
+    janela_diff.title(f"Comparação de backups - {nome_equip}")
+    janela_diff.geometry("800x600")
+
+    texto = scrolledtext.ScrolledText(janela_diff, font=("Courier", 10))
+    texto.pack(expand=True, fill='both')
+
+    texto.insert(tk.END, f"Comparando:\n- {pastas[1]}\n- {pastas[0]}\n\n")
+
+    for nome_arquivo in arquivos:
+        arq1 = os.path.join(pasta_antiga, nome_arquivo)
+        arq2 = os.path.join(pasta_nova, nome_arquivo)
+
+        if os.path.exists(arq1) and os.path.exists(arq2):
+            with open(arq1, encoding='utf-8') as f1, open(arq2, encoding='utf-8') as f2:
+                linhas1 = f1.readlines()
+                linhas2 = f2.readlines()
+
+            diff = difflib.unified_diff(
+                linhas1, linhas2,
+                fromfile=nome_arquivo + " (antigo)",
+                tofile=nome_arquivo + " (novo)",
+                lineterm=''
+            )
+
+            texto.insert(tk.END, f"\n====== Diferença: {nome_arquivo} ======\n")
+            houve_diferenca = False
+            for linha in diff:
+                texto.insert(tk.END, linha + "\n")
+                houve_diferenca = True
+            if not houve_diferenca:
+                texto.insert(tk.END, "Nenhuma diferença encontrada.\n")
+        else:
+            texto.insert(tk.END, f"[!] Arquivo ausente em uma das pastas: {nome_arquivo}\n")
+
+    texto.config(state='disabled')
 
 def editar_equipamento():
     selected = lista.curselection()
@@ -290,28 +350,51 @@ def editar_equipamento():
     abrir_cadastro(equip)
 
 root = tk.Tk()
-root.title("Cadastro de Equipamentos")
+root.title("Cadastro de Switch Huawei")
+root.geometry("600x400")  # janela mais larga para acomodar a lista e os botões
 
 cadastro_win = None
 janela_log = None
 
-lista = tk.Listbox(root, width=60)
-lista.pack()
+# Frame principal
+frame_principal = tk.Frame(root)
+frame_principal.pack(fill='both', expand=True)
 
-frame = tk.Frame(root)
-frame.pack(pady=10)
+# Frame da lista (lado esquerdo)
+frame_lista = tk.Frame(frame_principal)
+frame_lista.pack(side='left', fill='both', expand=True, padx=10, pady=10)
 
-btn_cadastrar = tk.Button(frame, text="Cadastrar Equipamento", command=lambda: abrir_cadastro(None))
-btn_editar = tk.Button(frame, text="Editar Equipamento", command=editar_equipamento)
-btn_excluir = tk.Button(frame, text="Excluir Equipamento", command=excluir_equipamento)
-btn_backup = tk.Button(frame, text="Executar Backup", command=lambda: abrir_log_backup(carregar_equipamentos()[lista.curselection()[0]]) if lista.curselection() else messagebox.showwarning("Atenção", "Selecione um equipamento!"))
-btn_ver_backups = tk.Button(frame, text="Ver Backups", command=exibir_backups)
+lista = tk.Listbox(frame_lista, width=40, height=15)
+lista.pack(side='left', fill='both', expand=True)
 
-btn_cadastrar.grid(row=0, column=0, padx=5)
-btn_editar.grid(row=0, column=1, padx=5)
-btn_excluir.grid(row=0, column=2, padx=5)
-btn_backup.grid(row=0, column=3, padx=5)
-btn_ver_backups.grid(row=0, column=4, padx=5)
+scrollbar = tk.Scrollbar(frame_lista)
+scrollbar.pack(side='right', fill='y')
+lista.config(yscrollcommand=scrollbar.set)
+scrollbar.config(command=lista.yview)
+
+# Frame dos botões (lado direito)
+frame_botoes = tk.Frame(frame_principal)
+frame_botoes.pack(side='right', padx=15, pady=10, fill='y')
+
+btn_cadastrar = tk.Button(frame_botoes, text="Cadastrar Equipamento", width=25, command=lambda: abrir_cadastro(None))
+btn_editar = tk.Button(frame_botoes, text="Editar Equipamento", width=25, command=editar_equipamento)
+btn_excluir = tk.Button(frame_botoes, text="Excluir Equipamento", width=25, command=excluir_equipamento)
+btn_backup = tk.Button(
+    frame_botoes,
+    text="Executar Backup",
+    width=25,
+    command=lambda: abrir_log_backup(carregar_equipamentos()[lista.curselection()[0]]) if lista.curselection() else messagebox.showwarning("Atenção", "Selecione um equipamento!")
+)
+btn_ver_backups = tk.Button(frame_botoes, text="Ver Backups", width=25, command=exibir_backups)
+btn_comparar = tk.Button(frame_botoes, text="Comparar Backups", width=25, command=comparar_backups_selecionado)
+
+# Adiciona os botões verticalmente
+btn_cadastrar.pack(pady=5)
+btn_editar.pack(pady=5)
+btn_excluir.pack(pady=5)
+btn_backup.pack(pady=5)
+btn_ver_backups.pack(pady=5)
+btn_comparar.pack(pady=5)
 
 atualizar_lista()
 root.mainloop()
