@@ -1,0 +1,871 @@
+display current-configuration all
+!Software Version V200R019C00SPC200
+#
+sysname rtaratp2
+#
+FTP client-source -a 172.17.100.7
+#
+ipv6
+#
+vcmp role transparent
+#
+vlan batch 4 41 678
+#
+lnp disable
+#
+multicast routing-enable
+#
+authentication-profile name default_authen_profile
+authentication-profile name dot1x_authen_profile
+authentication-profile name dot1xmac_authen_profile
+authentication-profile name mac_authen_profile
+authentication-profile name multi_authen_profile
+authentication-profile name portal_authen_profile
+#
+domain velonic admin
+#
+set flow-stat interval 30
+#
+set save-configuration delay 1
+set save-configuration backup-to-server server 198.18.200.41 transport-type ftp user bkp_rede_equipamentos password %^%#SF$|>wah!/a=`7CA6t#&oN|8(O`;uH3;o7~pOJ~:%^%#
+#
+telnet server enable
+#
+clock timezone Brasilia minus 03:00:00
+#
+diffserv domain default
+#
+ip vpn-instance SERVER_FARM
+ ipv4-family
+  route-distinguisher 268042:2
+  vpn-target 268042:2 export-extcommunity
+  vpn-target 268042:2 import-extcommunity
+#
+radius-server template default
+radius-server template velonic
+ radius-server shared-key cipher %^%#z\JlMP:>~-Mg*5J/CwFM,PPq0HG{p!'eV#F8O!'*%^%#
+ radius-server authentication 198.18.200.31 1812 source LoopBack 100 weight 80
+ radius-server accounting 198.18.200.31 1813 source LoopBack 100 weight 80
+ radius-server retransmit 2
+ undo radius-server user-name domain-included
+#
+bfd
+#
+mpls lsr-id 172.17.100.7
+mpls
+ mpls te
+ mpls rsvp-te
+ mpls te cspf
+#
+mpls l2vpn
+ mpls l2vpn default martini
+#
+vsi CAMERAS-IP
+ pwsignal ldp
+  vsi-id 31101
+  peer 172.17.100.8 negotiation-vc-id 31109
+  peer 172.17.100.1 negotiation-vc-id 31108
+ encapsulation ethernet
+#
+vsi VLAN850ATRANET
+ pwsignal ldp
+  vsi-id 850
+  flow-label both
+  peer 172.17.100.14
+ mtu 9200
+#
+vsi WIFI-HOTSPOT
+ pwsignal ldp
+  vsi-id 65
+  peer 172.17.100.8 upe
+ encapsulation ethernet
+#
+mpls ldp
+#
+#
+mpls ldp remote-peer compass
+ remote-ip 172.17.100.1
+#
+mpls ldp remote-peer rtsortp1
+ remote-ip 172.17.100.10
+#
+mpls ldp remote-peer rtsp3tp1
+ remote-ip 172.17.100.6
+#
+mpls ldp remote-peer rtsrqtp2
+ remote-ip 172.17.100.8
+#
+mpls ldp remote-peer spcotctltp1
+ remote-ip 172.17.100.5
+#
+mpls ldp remote-peer spsposp4tp1
+ remote-ip 172.17.100.4
+#
+mpls ldp remote-peer spsposp4tp2
+ remote-ip 172.17.100.14
+#
+mpls ldp remote-peer spsposp4tp3
+ remote-ip 172.17.100.2
+#
+mpls ldp remote-peer spstbodttg1
+ remote-ip 172.17.100.17
+#
+pki realm default
+ certificate-check none
+#
+traffic classifier any operator or
+ if-match any
+#
+traffic behavior 1GB
+ car cir 1100000 pir 1100000 cbs 137500000 pbs 137500000 green pass yellow pass red discard
+#
+traffic policy 1GB match-order config
+ classifier any behavior 1GB
+#
+free-rule-template name default_free_rule
+#
+portal-access-profile name portal_access_profile
+#
+drop-profile default
+#
+vlan 4
+ name GERENCIA_INEOS
+vlan 41
+ name CAMERAS-IP
+vlan 678
+ name VLAN678-MOB
+#
+aaa
+ authentication-scheme default
+ authentication-scheme radius
+  authentication-mode radius local
+ authentication-scheme velonic
+  authentication-mode radius local
+ authorization-scheme default
+ accounting-scheme default
+ accounting-scheme velonic
+  accounting-mode radius
+  accounting start-fail online
+ local-aaa-user password policy administrator 
+  password history record number 0
+  password expire 0
+ domain default
+  authentication-scheme radius
+  radius-server default
+ domain default_admin
+  authentication-scheme default
+ domain velonic
+  authentication-scheme velonic
+  accounting-scheme velonic
+  radius-server velonic
+ local-user noc password irreversible-cipher $1a$wXTN~|#XK/$b`1e8m)M6%~wY9'/b%=QmXBm+]Y#_Q,ZEgVUs_'@$
+ local-user noc privilege level 1
+ local-user noc service-type terminal ssh
+ local-user admin password irreversible-cipher $1a$}!qJ7}Z9+2$7Fi#)H3k=HF{1|.U#O!S='}~(\Q<s/o2K6Nbo^UO$
+ local-user admin privilege level 15
+ local-user admin service-type terminal http
+ local-user maehara password irreversible-cipher $1a$fLT%MYYFsL$5<L+D!-8Q6]L;uXWb|q.^uTrG=~+0QL+KI,I(/PY$
+ local-user maehara privilege level 15
+ local-user maehara service-type telnet terminal ssh
+#
+isis 10
+ graceful-restart
+ graceful-restart interval 30
+ is-level level-2
+ cost-style wide
+ timer lsp-generation 5 200 1000 level-2
+ flash-flood 15 level-2
+ network-entity 49.0000.0000.49c1.0000.ac11.6407.0000.00
+ is-name rtaratp2
+ preference 115
+ traffic-eng level-2
+ log-peer-change
+ maximum load-balancing 8
+ timer lsp-max-age 65535
+ timer lsp-refresh 65000
+ set-overload on-startup 300
+#
+ntp-service ipv6 server disable
+ntp-service unicast-server 200.160.7.186 source-interface Eth-Trunk30.2
+#
+interface Vlanif1
+#
+interface Vlanif4
+ description GERENCIA_INOES
+ ip binding vpn-instance SERVER_FARM
+ ip address 198.19.72.5 255.255.255.252
+#
+interface Vlanif41
+ description VLAN:CAMERAS_IP
+ l2 binding vsi CAMERAS-IP
+#
+interface Vlanif65
+ description IFLL:WIFI-HOTSPOT
+ l2 binding vsi WIFI-HOTSPOT
+#
+interface Vlanif678
+ description CL:VLAN678-MOB
+ mtu 9198
+ mpls l2vc 172.17.100.6 678 control-word
+ mpls l2vpn flow-label both
+#
+interface Vlanif1309
+#
+interface MEth0/0/1
+ ip address 192.168.1.253 255.255.255.0
+#
+load-balance-profile JETNET
+ l2 field smac dmac l2-protocol sport
+ ipv6 field sip dip l4-sport l4-dport
+ ipv4 field sip dip l4-sport l4-dport
+ mpls field top-label 2nd-label sip dip sport
+#
+interface Eth-Trunk2
+ undo portswitch
+ description IFBBGR:CONEXAO_SPSTBODTTP1
+ mtu 9216
+ ip address 172.17.0.33 255.255.255.254
+ isis enable 10
+ isis circuit-type p2p
+ isis circuit-level level-2
+ isis cost 1010 level-2
+ isis ldp-sync
+ isis bfd enable
+ isis bfd min-tx-interval 300 min-rx-interval 300
+ isis suppress-reachability level-2
+ pim sm
+ mpls
+ mpls te
+ mpls rsvp-te
+ mpls ldp
+ mode lacp
+ load-balance enhanced profile JETNET
+#
+interface Eth-Trunk6
+ undo portswitch
+ description IFBBGR:CONEXAO_RTSRQTP2
+ mtu 9216
+ ip address 172.17.0.76 255.255.255.254
+ isis enable 10
+ isis circuit-type p2p
+ isis circuit-level level-2
+ isis cost 500 level-2
+ isis ldp-sync
+ isis bfd enable
+ isis bfd min-tx-interval 300 min-rx-interval 300
+ isis suppress-reachability level-2
+ pim sm
+ mpls
+ mpls te
+ mpls rsvp-te
+ mpls ldp
+ mode lacp
+ load-balance enhanced profile JETNET
+#
+interface Eth-Trunk9
+ undo portswitch
+ description IFBBGR:CONEXAO_SPSPOITATP1
+ mtu 9216
+ ip address 172.17.0.52 255.255.255.254
+ isis enable 10
+ isis circuit-type p2p
+ isis circuit-level level-2
+ isis cost 500 level-2
+ isis ldp-sync
+ isis bfd enable
+ isis bfd min-tx-interval 300 min-rx-interval 300
+ isis suppress-reachability level-2
+ pim sm
+ mpls
+ mpls te
+ mpls rsvp-te
+ mpls ldp
+ mode lacp
+ load-balance enhanced profile JETNET
+#
+interface Eth-Trunk30
+ undo portswitch
+ description IFLL:ARAGP1
+ mode lacp
+#
+interface Eth-Trunk30.2
+ description IFLL:GERENCIA
+ dot1q termination vid 2
+ mpls l2vc 172.17.100.1 14 raw
+#
+interface Eth-Trunk30.30
+ description IF:VOIP
+ dot1q termination vid 30
+ mpls l2vc 172.17.100.1 30 raw
+#
+interface Eth-Trunk30.33
+ description GER-CHINA
+ mtu 9000
+ dot1q termination vid 33
+ mpls l2vc 172.17.100.8 33 raw
+#
+interface Eth-Trunk30.65
+ dot1q termination vid 66
+ l2 binding vsi WIFI-HOTSPOT
+#
+interface Eth-Trunk30.100
+ description CL:RTARATP2-COMPASS01-LD202300381542-ARKEMA:GERENCIA
+ shutdown
+ qinq termination pe-vid 100 ce-vid 100
+ ip binding vpn-instance SERVER_FARM
+ ip address 198.19.72.25 255.255.255.252
+#
+interface Eth-Trunk30.102
+ description GERENCIA_TAMBORTEK
+ shutdown
+ qinq termination pe-vid 100 ce-vid 102
+ ip binding vpn-instance SERVER_FARM
+ ip address 198.19.72.29 255.255.255.252
+#
+interface Eth-Trunk30.549
+ description IPOE:ARA:GPON_P1
+ mtu 8000
+ qinq stacking vid 549 pe-vid 549
+ mpls l2vc 172.17.100.1 549 raw
+#
+interface Eth-Trunk30.550
+ description IPOE:ARA:GPON_P2
+ mtu 8000
+ qinq stacking vid 550 pe-vid 550
+ mpls l2vc 172.17.100.1 550 raw
+#
+interface Eth-Trunk30.551
+ description IPOE:ARA:GPON_P3
+ mtu 8000
+ qinq stacking vid 551 pe-vid 551
+ mpls l2vc 172.17.100.1 551 raw
+#
+interface Eth-Trunk30.552
+ description IPOE:ARA:GPON_P4
+ mtu 8000
+ qinq stacking vid 552 pe-vid 552
+ mpls l2vc 172.17.100.1 552 raw
+#
+interface Eth-Trunk30.553
+ description IPOE:ARA:GPON_P5
+ mtu 8000
+ qinq stacking vid 553 pe-vid 553
+ mpls l2vc 172.17.100.1 553 raw
+#
+interface Eth-Trunk30.554
+ description IPOE:ARA:GPON_P6
+ mtu 8000
+ qinq stacking vid 554 pe-vid 554
+ mpls l2vc 172.17.100.1 554 raw
+#
+interface Eth-Trunk30.555
+ description IPOE:ARA:GPON_P7
+ mtu 8000
+ qinq stacking vid 555 pe-vid 555
+ mpls l2vc 172.17.100.1 555 raw
+#
+interface Eth-Trunk30.556
+ description IPOE:ARA:GPON_P8
+ mtu 8000
+ qinq stacking vid 556 pe-vid 556
+ mpls l2vc 172.17.100.1 556 raw
+#
+interface Eth-Trunk30.557
+ description IPOE:ARA:GPON_P9
+ mtu 8000
+ qinq stacking vid 557 pe-vid 557
+ mpls l2vc 172.17.100.1 557 raw
+#
+interface Eth-Trunk30.558
+ description IPOE:ARA:GPON_P10
+ mtu 8000
+ qinq stacking vid 558 pe-vid 558
+ mpls l2vc 172.17.100.1 558 raw
+#
+interface Eth-Trunk30.559
+ description IPOE:ARA:GPON_P11
+ mtu 8000
+ qinq stacking vid 559 pe-vid 559
+ mpls l2vc 172.17.100.1 559 raw
+#
+interface Eth-Trunk30.560
+ description IPOE:ARA:GPON_P12
+ mtu 8000
+ qinq stacking vid 560 pe-vid 560
+ mpls l2vc 172.17.100.1 560 raw
+#
+interface Eth-Trunk30.561
+ description IPOE:ARA:GPON_P13
+ mtu 8000
+ qinq stacking vid 561 pe-vid 561
+ mpls l2vc 172.17.100.1 561 raw
+#
+interface Eth-Trunk30.562
+ description IPOE:ARA:GPON_P14
+ mtu 8000
+ qinq stacking vid 562 pe-vid 562
+ mpls l2vc 172.17.100.1 562 raw
+#
+interface Eth-Trunk30.563
+ description IPOE:ARA:GPON_P15
+ mtu 8000
+ qinq stacking vid 563 pe-vid 563
+ mpls l2vc 172.17.100.1 563 raw
+#
+interface Eth-Trunk30.564
+ description IPOE:ARA:GPON_P16
+ mtu 8000
+ qinq stacking vid 564 pe-vid 564
+ mpls l2vc 172.17.100.1 564 raw
+#
+interface Eth-Trunk30.589
+ description IPOE:ARA:GPON_IPFIXO
+ mtu 8000
+ qinq stacking vid 589 pe-vid 589
+ mpls l2vc 172.17.100.1 589 raw
+#
+interface Eth-Trunk30.1000
+ description "GPON ARACARIGUAMA 0/1/0"
+ mtu 8000
+ qinq stacking vid 1000 pe-vid 1000
+ mpls l2vc 172.17.100.17 1000 raw
+ mpls l2vc 172.17.100.1 1000 raw secondary
+#
+interface Eth-Trunk30.1001
+ description "GPON ARACARIGUAMA 0/1/2"
+ mtu 8000
+ qinq stacking vid 1001 pe-vid 1001
+ mpls l2vc 172.17.100.17 1001 raw
+ mpls l2vc 172.17.100.1 1001 raw secondary
+#
+interface Eth-Trunk30.1002
+ description "GPON ARACARIGUAMA 0/1/3"
+ mtu 8000
+ qinq stacking vid 1002 pe-vid 1002
+ mpls l2vc 172.17.100.1 1002 raw
+ mpls l2vc 172.17.100.17 1002 raw secondary
+#
+interface Eth-Trunk30.1003
+ description "GPON ARACARIGUAMA 0/1/4"
+ mtu 8000
+ qinq stacking vid 1003 pe-vid 1003
+ mpls l2vc 172.17.100.1 1003 raw
+ mpls l2vc 172.17.100.17 1003 raw secondary
+#
+interface Eth-Trunk30.1004
+ description "GPON ARACARIGUAMA 0/1/5"
+ mtu 8000
+ qinq stacking vid 1004 pe-vid 1004
+ mpls l2vc 172.17.100.17 1004 raw
+ mpls l2vc 172.17.100.1 1004 raw secondary
+#
+interface Eth-Trunk30.1005
+ description "GPON ARACARIGUAMA 0/1/6"
+ mtu 8000
+ qinq stacking vid 1005 pe-vid 1005
+ mpls l2vc 172.17.100.1 1005 raw
+#
+interface Eth-Trunk30.1006
+ description "GPON ARACARIGUAMA 0/1/7"
+ mtu 8000
+ qinq stacking vid 1006 pe-vid 1006
+ mpls l2vc 172.17.100.1 1006 raw
+#
+interface Eth-Trunk30.1007
+ description "GPON ARACARIGUAMA 0/1/8"
+ mtu 8000
+ qinq stacking vid 1007 pe-vid 1007
+ mpls l2vc 172.17.100.1 1007 raw
+#
+interface Eth-Trunk30.1008
+ description "GPON ARACARIGUAMA 0/1/9"
+ mtu 8000
+ qinq stacking vid 1008 pe-vid 1008
+ mpls l2vc 172.17.100.1 1008 raw
+#
+interface Eth-Trunk30.1009
+ description "GPON ARACARIGUAMA 0/1/10"
+ mtu 8000
+ qinq stacking vid 1009 pe-vid 1009
+ mpls l2vc 172.17.100.1 1009 raw
+#
+interface Eth-Trunk30.1010
+ description "GPON ARACARIGUAMA 0/1/11"
+ mtu 8000
+ qinq stacking vid 1010 pe-vid 1010
+ mpls l2vc 172.17.100.1 1010 raw
+#
+interface Eth-Trunk30.1011
+ description "GPON ARACARIGUAMA 0/1/12"
+ mtu 8000
+ qinq stacking vid 1011 pe-vid 1011
+ mpls l2vc 172.17.100.1 1011 raw
+#
+interface Eth-Trunk30.1012
+ description "GPON ARACARIGUAMA 0/1/13"
+ mtu 8000
+ qinq stacking vid 1012 pe-vid 1012
+ mpls l2vc 172.17.100.1 1012 raw
+#
+interface Eth-Trunk30.1013
+ description "GPON ARACARIGUAMA 0/1/14"
+ mtu 8000
+ qinq stacking vid 1013 pe-vid 1013
+ mpls l2vc 172.17.100.1 1013 raw
+#
+interface Eth-Trunk30.1014
+ description "GPON ARACARIGUAMA 0/1/15"
+ mtu 8000
+ qinq stacking vid 1014 pe-vid 1014
+ mpls l2vc 172.17.100.1 1014 raw
+#
+interface Eth-Trunk30.1016
+ description "GPON ARACARIGUAMA 0/1/16"
+ mtu 8000
+ qinq stacking vid 1016 pe-vid 1016
+ mpls l2vc 172.17.100.1 1016 raw
+#
+interface Eth-Trunk30.1500
+ description MULTICAST
+ dot1q termination vid 1500
+ ip address 10.0.0.1 255.255.255.0
+ igmp enable
+ igmp static-group 235.0.0.0 inc-step-mask 0.0.0.1 number 254 dot1q vid 1500
+ statistic enable both
+#
+interface Eth-Trunk30.1537
+ description CL:RTARATP2-COMPASS01-LD202200371537-WAS
+ dot1q termination vid 1537
+ mpls l2vc 172.17.100.1 1537 raw
+#
+interface Eth-Trunk30.1538
+ description CL:RTARATP2-COMPASS01-LD202200351539-NEOSTEEL
+ dot1q termination vid 1538
+ mpls l2vc 172.17.100.1 1538 raw
+#
+interface Eth-Trunk30.1540
+ description CL:RTARATP2-RTODTTP1-LD202000200020-IGN_BRADESCO
+ mtu 2000
+ dot1q termination vid 1540
+ mpls l2vc 172.17.100.14 20
+ mpls l2vpn flow-label both
+#
+interface Eth-Trunk30.1542
+ description CL:RTARATP2-COMPASS01-LD202300381542-ARKEMA:GERENCIA
+ dot1q termination vid 1542
+ mpls l2vc 172.17.100.1 1542 raw
+#
+interface Eth-Trunk30.1543
+ description CL:RTARATP2-COMPASS01-LD202300381542-TAMBORTEC
+ dot1q termination vid 1543
+ mpls l2vc 172.17.100.1 1543 raw
+#
+interface XGigabitEthernet0/0/1
+#
+interface XGigabitEthernet0/0/2
+ undo portswitch
+ description CL:RTARATP2-SPSPOSP4TP1-LD202000170017-LINKTEL
+ mtu 9200
+ mpls l2vc 172.17.100.14 1771
+#
+interface XGigabitEthernet0/0/3
+ undo portswitch
+ description IFBBGR:Compass01-0/7/1/6-Netell
+ mtu 9000
+ ip address 172.17.0.17 255.255.255.254
+ isis enable 10
+ isis circuit-type p2p
+ isis circuit-level level-2
+ isis cost 1995 level-2
+ isis ldp-sync
+ isis bfd enable
+ isis bfd min-tx-interval 300 min-rx-interval 300
+ isis suppress-reachability level-2
+ mpls
+ mpls te
+ mpls rsvp-te
+ mpls ldp
+#
+interface XGigabitEthernet0/0/4
+#
+interface XGigabitEthernet0/0/5
+ shutdown
+#
+interface XGigabitEthernet0/0/6
+ shutdown
+#
+interface XGigabitEthernet0/0/7
+#
+interface XGigabitEthernet0/0/8
+#
+interface XGigabitEthernet0/0/9
+ shutdown
+#
+interface XGigabitEthernet0/0/10
+ description CL:SPSPOSP4TP2-RTCABTP1-LD202300420850-ATRANET
+ port link-type hybrid
+#
+interface XGigabitEthernet0/0/10.51
+ description CL:TRANSPORTE|RTARATP2|SPSTBODTTG1|300MB|LD6082|ATRANET
+ mtu 9200
+ dot1q termination vid 51
+ mpls l2vc 172.17.100.17 51 control-word
+ mpls l2vpn flow-label both
+#
+interface XGigabitEthernet0/0/10.850
+ mtu 9200
+ dot1q termination vid 510
+ dot1q termination vid 850
+ dot1q termination vid 1501
+ dot1q termination vid 1550
+ l2 binding vsi VLAN850ATRANET
+#
+interface XGigabitEthernet0/0/11
+#
+interface XGigabitEthernet0/0/12
+ undo portswitch
+ description IFLL:ESCRITORIO
+ mpls l2vc 172.17.100.1 2004
+#
+interface XGigabitEthernet0/0/13
+ shutdown
+#
+interface XGigabitEthernet0/0/14
+ description IFBB:CONEXAO_SWBRESPO001_ASAP:ROTA_TABOAO_LOUCOS
+ port link-type trunk
+ undo port trunk allow-pass vlan 1
+#
+interface XGigabitEthernet0/0/14.155
+ description IF:SWAP|ASAP|SWBRESPO001|10G
+ mtu 9000
+ dot1q termination vid 155
+ mpls l2vc 172.17.100.5 155
+#
+interface XGigabitEthernet0/0/15
+ undo portswitch
+ description CAMERA_4415
+ mpls l2vc 172.17.100.1 4415
+#
+interface XGigabitEthernet0/0/16
+#
+interface XGigabitEthernet0/0/17
+ undo portswitch
+ description CAMERA_4413
+ mpls l2vc 172.17.100.1 4413
+#
+interface XGigabitEthernet0/0/18
+ undo portswitch
+ description CAMERA_4412
+ mpls l2vc 172.17.100.1 4412
+#
+interface XGigabitEthernet0/0/19
+ description CAMERA_4411
+ port link-type access
+ port default vlan 41
+ stp disable
+ stp bpdu-filter enable
+#
+interface XGigabitEthernet0/0/20
+ description CAMERAS
+ port default vlan 41
+ stp disable
+ stp bpdu-filter enable
+#
+interface XGigabitEthernet0/0/21
+ description IFLL:ARAGP1:0/9/1
+ eth-trunk 30
+#
+interface XGigabitEthernet0/0/22
+ description CAMERA_4414
+ port link-type access
+ port default vlan 41
+ stp disable
+ stp bpdu-filter enable
+#
+interface XGigabitEthernet0/0/23
+ description CL:RTARATP2-SPSPOSP4TP2-LD202000230023-SITELBRAS_INEOS
+ port link-type hybrid
+ port hybrid tagged vlan 4
+#
+interface XGigabitEthernet0/0/23.23
+ mtu 4096
+ dot1q termination vid 2789
+ dot1q termination vid 4084
+ mpls l2vc 172.17.100.14 23
+ mpls l2vpn flow-label both
+#
+interface XGigabitEthernet0/0/24
+#
+interface 100GE0/0/1
+ description IFBBGR:CONEXAO_RTSRQTP2:100GE0/0/2:ROTA_PROPRIA
+ eth-trunk 6
+#
+interface 100GE0/0/2
+ description IFBB:CONEXAO_SPSTBODTTP1:100GE0/1/55:ROTA_PROPRIA
+ eth-trunk 2
+#
+interface 100GE0/0/3
+ fec mode rs
+ undo portswitch
+ description IFBB:CONEXAO_RTITUTP1:100GE0/0/6:ROTA_FIOFIBRA
+ mtu 9216
+ ip address 172.17.0.96 255.255.255.254
+ isis enable 10
+ isis circuit-type p2p
+ isis circuit-level level-2
+ isis cost 15000 level-2
+ isis ldp-sync
+ isis bfd enable
+ isis bfd min-tx-interval 300 min-rx-interval 300
+ isis suppress-reachability level-2
+ pim sm
+ mpls
+ mpls te
+ mpls rsvp-te
+ mpls ldp
+#
+interface 100GE0/0/4
+ undo portswitch
+ description IFBB:CONEXAO_RTSORTP1:100GE0/0/1:ROTA_UFINET:DESIG:BRBRJET10127730F
+ mtu 9216
+ ip address 172.17.0.90 255.255.255.254
+ isis enable 10
+ isis circuit-type p2p
+ isis circuit-level level-2
+ isis cost 800 level-2
+ isis ldp-sync
+ isis bfd enable
+ isis bfd min-tx-interval 300 min-rx-interval 300
+ isis suppress-reachability level-2
+ pim sm
+ mpls
+ mpls te
+ mpls rsvp-te
+ mpls ldp
+#
+interface 100GE0/0/5
+ fec mode rs
+ undo portswitch
+ description IFBB:SPSPOSP2TP1:100GE0/0/2:ROTA_FIOFIBRA
+ mtu 9216
+ ip address 172.17.0.98 255.255.255.254
+ isis enable 10
+ isis circuit-type p2p
+ isis circuit-level level-2
+ isis cost 800 level-2
+ isis ldp-sync
+ isis bfd enable
+ isis bfd min-tx-interval 300 min-rx-interval 300
+ isis suppress-reachability level-2
+ pim sm
+ mpls
+ mpls te
+ mpls rsvp-te
+ mpls ldp
+#
+interface 100GE0/0/6
+ description IFBBGR:CONEXAO_SPSPOITATP1:40GE0/0/1:ROTA_TECKLINK-ROTA_JETNET
+ eth-trunk 9
+#
+interface NULL0
+#
+interface LoopBack2
+ description IFLO:LOOPBACK IGP
+ ip address 172.17.2.7 255.255.255.255
+ isis enable 10
+#
+interface LoopBack100
+ description IFLO:LOOPBACK LDP
+ ip address 172.17.100.7 255.255.255.255
+ isis enable 10
+#
+bgp 268042
+ router-id 172.17.2.7
+ peer 172.17.2.1 as-number 268042
+ peer 172.17.2.1 connect-interface LoopBack2
+ peer 172.17.100.1 as-number 268042
+ peer 172.17.100.1 description compass01
+ peer 172.17.100.1 connect-interface LoopBack100
+ #
+ ipv4-family unicast
+  undo synchronization
+  preference 20 200 1
+  undo peer 172.17.2.1 enable
+  peer 172.17.100.1 enable
+ #
+ ipv6-family unicast
+  undo synchronization
+  preference 20 200 1
+ #
+ ipv4-family vpnv4
+  policy vpn-target
+  peer 172.17.2.1 enable
+  peer 172.17.2.1 advertise-community
+  peer 172.17.100.1 enable
+ #
+ ipv4-family vpn-instance SERVER_FARM
+  import-route direct
+  import-route static
+#
+pim
+ static-rp 172.17.101.2
+ register-header-checksum
+#
+cpu-defend policy copp
+#
+route recursive-lookup tunnel
+#
+snmp-agent
+snmp-agent local-engineid 800007DB03DC99149EEEB0
+snmp-agent community read cipher %^%#rN)s/fFV%O(8)VItF(/9Cl]v%>J0<R]p3E;4^:D6IYj$7oIktUx!kh~]Gg^Y_YRy*td6G0GaU%%mtV_G%^%#
+snmp-agent sys-info version v2c v3
+#
+stelnet server enable
+ssh client first-time enable
+ssh server cipher aes256_ctr aes128_ctr
+ssh server hmac sha2_256
+ssh client cipher aes256_ctr aes128_ctr
+ssh client hmac sha2_256
+ssh server dh-exchange min-len 2048
+#
+user-interface con 0
+ authentication-mode aaa
+user-interface vty 0 4
+ authentication-mode aaa
+ user privilege level 15
+ protocol inbound all
+user-interface vty 16 20
+ authentication-mode aaa
+ user privilege level 15
+ protocol inbound all
+#
+wlan
+ traffic-profile name default
+ security-profile name default
+ security-profile name default-wds
+ security-profile name default-mesh
+ ssid-profile name default
+ vap-profile name default
+ wds-profile name default
+ mesh-handover-profile name default
+ mesh-profile name default
+ regulatory-domain-profile name default
+ air-scan-profile name default
+ rrm-profile name default
+ radio-2g-profile name default
+ radio-5g-profile name default
+ wids-profile name default
+ ap-system-profile name default
+ port-link-profile name default
+ wired-port-profile name default
+ ap-group name default
+ provision-ap
+#
+dot1x-access-profile name dot1x_access_profile
+#
+mac-access-profile name mac_access_profile
+#
+ops
+#
+return
+<rtaratp2>

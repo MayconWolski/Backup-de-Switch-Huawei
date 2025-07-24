@@ -1,0 +1,59 @@
+display ip routing-table
+Route Flags: R - relay, D - download to fib, T - to vpn-instance
+------------------------------------------------------------------------------
+Routing Tables: Public
+         Destinations : 49       Routes : 49       
+
+Destination/Mask    Proto   Pre  Cost      Flags NextHop         Interface
+
+        0.0.0.0/0   ISIS-L2 115  4900        D   172.17.0.66     Eth-Trunk2
+ 45.167.183.255/32  ISIS-L2 115  4900        D   172.17.0.66     Eth-Trunk2
+      127.0.0.0/8   Direct  0    0           D   127.0.0.1       InLoopBack0
+      127.0.0.1/32  Direct  0    0           D   127.0.0.1       InLoopBack0
+     172.17.0.6/31  Direct  0    0           D   172.17.0.6      Eth-Trunk4
+     172.17.0.6/32  Direct  0    0           D   127.0.0.1       Eth-Trunk4
+    172.17.0.10/31  ISIS-L2 115  3900        D   172.17.0.66     Eth-Trunk2
+    172.17.0.20/31  ISIS-L2 115  4400        D   172.17.0.66     Eth-Trunk2
+    172.17.0.34/31  ISIS-L2 115  6400        D   172.17.0.66     Eth-Trunk2
+    172.17.0.44/31  ISIS-L2 115  8200        D   172.17.0.66     Eth-Trunk2
+    172.17.0.66/31  Direct  0    0           D   172.17.0.67     Eth-Trunk2
+    172.17.0.67/32  Direct  0    0           D   127.0.0.1       Eth-Trunk2
+    172.17.0.72/31  ISIS-L2 115  2900        D   172.17.0.66     Eth-Trunk2
+    172.17.0.88/31  ISIS-L2 115  9400        D   172.17.0.66     Eth-Trunk2
+    172.17.0.96/31  Direct  0    0           D   172.17.0.97     100GE0/0/6
+    172.17.0.97/32  Direct  0    0           D   127.0.0.1       100GE0/0/6
+   172.17.0.102/31  ISIS-L2 115  7700        D   172.17.0.66     Eth-Trunk2
+   172.17.0.110/31  ISIS-L2 115  2900        D   172.17.0.66     Eth-Trunk2
+     172.17.2.1/32  ISIS-L2 115  4900        D   172.17.0.66     Eth-Trunk2
+     172.17.2.3/32  ISIS-L2 115  3900        D   172.17.0.66     Eth-Trunk2
+     172.17.2.4/32  ISIS-L2 115  2400        D   172.17.0.66     Eth-Trunk2
+     172.17.2.5/32  ISIS-L2 115  7400        D   172.17.0.66     Eth-Trunk2
+     172.17.2.6/32  ISIS-L2 115  1900        D   172.17.0.66     Eth-Trunk2
+     172.17.2.7/32  ISIS-L2 115  1900        D   172.17.0.66     Eth-Trunk2
+     172.17.2.8/32  ISIS-L2 115  2400        D   172.17.0.66     Eth-Trunk2
+     172.17.2.9/32  ISIS-L2 115  2898        D   172.17.0.66     Eth-Trunk2
+    172.17.2.10/32  ISIS-L2 115  2700        D   172.17.0.66     Eth-Trunk2
+    172.17.2.11/32  Direct  0    0           D   127.0.0.1       LoopBack2
+    172.17.2.12/32  ISIS-L2 115  2900        D   172.17.0.66     Eth-Trunk2
+    172.17.2.13/32  ISIS-L2 115  500         D   172.17.0.66     Eth-Trunk2
+    172.17.2.14/32  ISIS-L2 115  3000        D   172.17.0.66     Eth-Trunk2
+    172.17.2.15/32  ISIS-L2 115  2400        D   172.17.0.66     Eth-Trunk2
+    172.17.2.17/32  ISIS-L2 115  1400        D   172.17.0.66     Eth-Trunk2
+     172.17.6.1/32  ISIS-L2 115  4900        D   172.17.0.66     Eth-Trunk2
+   172.17.100.1/32  ISIS-L2 115  4900        D   172.17.0.66     Eth-Trunk2
+   172.17.100.3/32  ISIS-L2 115  3900        D   172.17.0.66     Eth-Trunk2
+   172.17.100.4/32  ISIS-L2 115  2400        D   172.17.0.66     Eth-Trunk2
+   172.17.100.5/32  ISIS-L2 115  7400        D   172.17.0.66     Eth-Trunk2
+   172.17.100.6/32  ISIS-L2 115  1900        D   172.17.0.66     Eth-Trunk2
+   172.17.100.7/32  ISIS-L2 115  1900        D   172.17.0.66     Eth-Trunk2
+   172.17.100.8/32  ISIS-L2 115  2400        D   172.17.0.66     Eth-Trunk2
+   172.17.100.9/32  ISIS-L2 115  2898        D   172.17.0.66     Eth-Trunk2
+  172.17.100.10/32  ISIS-L2 115  2700        D   172.17.0.66     Eth-Trunk2
+  172.17.100.11/32  Direct  0    0           D   127.0.0.1       LoopBack100
+  172.17.100.12/32  ISIS-L2 115  2900        D   172.17.0.66     Eth-Trunk2
+  172.17.100.13/32  ISIS-L2 115  500         D   172.17.0.66     Eth-Trunk2
+  172.17.100.14/32  ISIS-L2 115  3000        D   172.17.0.66     Eth-Trunk2
+  172.17.100.15/32  ISIS-L2 115  2400        D   172.17.0.66     Eth-Trunk2
+  172.17.100.17/32  ISIS-L2 115  1400        D   172.17.0.66     Eth-Trunk2
+
+<rtitutp1>

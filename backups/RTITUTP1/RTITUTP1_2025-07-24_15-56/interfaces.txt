@@ -1,0 +1,82 @@
+display interface brief
+PHY: Physical
+*down: administratively down
+#down: LBDT down
+(l): loopback
+(s): spoofing
+(E): E-Trunk down
+(b): BFD down
+(e): ETHOAM down
+(dl): DLDP down
+(lb): LBDT block
+(lp): Loop-detect block
+(o): Observe-port forwarding down
+InUti/OutUti: input utility/output utility
+Interface                   PHY   Protocol  InUti OutUti   inErrors  outErrors
+Eth-Trunk1                  down  down         0%     0%          0          0
+Eth-Trunk2                  up    up       11.94%  2.14%          0          0
+  100GE0/0/3                up    up       11.94%  2.14%          0          0
+Eth-Trunk4                  up    up           0%     0%       3635          0
+  XGigabitEthernet0/0/7     up    up           0%     0%          0          0
+  XGigabitEthernet0/0/8     up    up           0%     0%       3635          0
+LoopBack2                   up    up(s)        0%     0%          0          0
+LoopBack100                 up    up(s)        0%     0%          0          0
+MEth0/0/1                   down  down         0%     0%          0          0
+NULL0                       up    up(s)        0%     0%          0          0
+Tunnel1                     up    down         --     --          0          0
+Tunnel3                     up    down         --     --          0          0
+Tunnel16                    up    down         --     --          0          0
+Tunnel17                    up    up           --     --          0          0
+Vlanif1                     up    down         --     --          0          0
+Vlanif41                    up    up           --     --          0          0
+Vlanif1008                  down  down         --     --          0          0
+Vlanif3900                  up    up           --     --          0          0
+XGigabitEthernet0/0/1       up    up        0.33%  1.06%          0          0
+XGigabitEthernet0/0/1.52    up    up           0%     0%          0          0
+XGigabitEthernet0/0/1.53    up    up           0%     0%          0          0
+XGigabitEthernet0/0/2       up    up           0%     0%          0          0
+XGigabitEthernet0/0/3       up    up        0.01%  0.02%          0          0
+XGigabitEthernet0/0/3.65    up    up           0%     0%          0          0
+XGigabitEthernet0/0/3.300   up    up           0%     0%          0          0
+XGigabitEthernet0/0/3.591   up    up           0%     0%          0          0
+XGigabitEthernet0/0/4       down  down         0%     0%          0          0
+XGigabitEthernet0/0/5       up    down      5.35% 27.73%          0          0
+XGigabitEthernet0/0/5.11    up    up           0%     0%          0          0
+XGigabitEthernet0/0/6       up    down      2.17%  9.29%          0          0
+XGigabitEthernet0/0/6.1075  up    up           0%     0%          0          0
+XGigabitEthernet0/0/6.1076  up    up           0%     0%          0          0
+XGigabitEthernet0/0/9       down  down         0%     0%          0          0
+XGigabitEthernet0/0/10      up    down         0%  5.81%          0          0
+XGigabitEthernet0/0/10.66   up    up           0%     0%          0          0
+XGigabitEthernet0/0/10.701  up    up           0%  1.83%          0          0
+XGigabitEthernet0/0/10.702  up    up           0%  3.98%          0          0
+XGigabitEthernet0/0/11      up    up        1.70%  6.65%          0          0
+XGigabitEthernet0/0/11.45   up    up        1.70%  6.64%          0          0
+XGigabitEthernet0/0/12      up    up        0.04%  0.36%          0          0
+XGigabitEthernet0/0/12.60   up    up           0%     0%          0          0
+XGigabitEthernet0/0/12.4011 up    up           0%     0%          0          0
+XGigabitEthernet0/0/13      up    up           0%     0%          0          0
+XGigabitEthernet0/0/14      down  down         0%     0%          0          0
+XGigabitEthernet0/0/14.4047 down  down         0%     0%          0          0
+XGigabitEthernet0/0/15      up    down      0.35%  0.64%          0          0
+XGigabitEthernet0/0/15.65   up    up           0%     0%          0          0
+XGigabitEthernet0/0/15.665  up    up           0%     0%          0          0
+XGigabitEthernet0/0/16      up    down         0%     0%          0          0
+XGigabitEthernet0/0/16.2098 up    up           0%     0%          0          0
+XGigabitEthernet0/0/17      up    down         0%     0%          0          0
+XGigabitEthernet0/0/17.68   up    up           0%     0%          0          0
+XGigabitEthernet0/0/17.703  up    up           0%     0%          0          0
+XGigabitEthernet0/0/18      up    down      0.15%  1.45%          0          0
+XGigabitEthernet0/0/18.703  up    up        0.15%  1.45%          0          0
+XGigabitEthernet0/0/19      down  down         0%     0%          0          0
+XGigabitEthernet0/0/20      down  down         0%     0%          0          0
+XGigabitEthernet0/0/21      up    up        3.43%  0.09%          0          0
+XGigabitEthernet0/0/22      down  down         0%     0%          0          0
+XGigabitEthernet0/0/23      up    up           0%     0%          0          0
+XGigabitEthernet0/0/24      down  down         0%     0%          0          0
+100GE0/0/1                  up    up           0%     0%     236466          0
+100GE0/0/2                  up    up           0%     0%     200581          0
+100GE0/0/4                  up    up        0.06%  0.42%          0          0
+100GE0/0/5                  down  down         0%     0%          0          0
+100GE0/0/6                  up    up           0%     0%       4784          0
+<rtitutp1>
