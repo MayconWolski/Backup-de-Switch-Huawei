@@ -10,6 +10,7 @@ import subprocess
 import platform
 import threading
 import re
+import difflib
 
 EQUIPAMENTOS_FILE = "equipamentos.json"
 BACKUP_DIR = "backups"
@@ -26,6 +27,62 @@ def criptografar(texto):
 
 def descriptografar(texto):
     return base64.b64decode(texto.encode()).decode()
+def comparar_backups_ui():
+    selected = lista.curselection()
+    if not selected:
+        messagebox.showwarning("Atenção", "Selecione um equipamento para comparar os backups!")
+        return
+
+    equip = carregar_equipamentos()[selected[0]]
+    nome = equip['nome']
+    base_dir = os.path.join(BACKUP_DIR, nome)
+
+    if not os.path.exists(base_dir):
+        messagebox.showerror("Erro", f"Nenhum backup encontrado para o equipamento '{nome}'.")
+        return
+
+    pastas = [p for p in os.listdir(base_dir) if os.path.isdir(os.path.join(base_dir, p))]
+    pastas = sorted(pastas, reverse=True)
+    if len(pastas) < 2:
+        messagebox.showerror("Erro", f"Menos de dois backups disponíveis para '{nome}'.")
+        return
+
+    pasta_nova = os.path.join(base_dir, pastas[0])
+    pasta_antiga = os.path.join(base_dir, pastas[1])
+    arquivos = os.listdir(pasta_nova)
+
+    # Criar janela para exibir comparação
+    janela_comp = tk.Toplevel(root)
+    janela_comp.title(f"Comparação - {nome}")
+    janela_comp.geometry("700x500")
+
+    texto = scrolledtext.ScrolledText(janela_comp, state='normal', font=("Courier", 10))
+    texto.pack(expand=True, fill='both')
+
+    def log(msg):
+        texto.insert(tk.END, msg + "\n")
+        texto.see(tk.END)
+
+    log(f"[+] Comparando:\n - {pastas[1]}\n - {pastas[0]}\n")
+
+    for nome_arquivo in arquivos:
+        arq1 = os.path.join(pasta_antiga, nome_arquivo)
+        arq2 = os.path.join(pasta_nova, nome_arquivo)
+        if os.path.exists(arq1) and os.path.exists(arq2):
+            log(f"\n====== Diferença: {nome_arquivo} ======")
+            with open(arq1, encoding='utf-8') as f1, open(arq2, encoding='utf-8') as f2:
+                linhas1 = f1.readlines()
+                linhas2 = f2.readlines()
+
+            diff = difflib.unified_diff(linhas1, linhas2, fromfile=nome_arquivo + "_OLD", tofile=nome_arquivo + "_NEW", lineterm='')
+            houve_diferenca = False
+            for linha in diff:
+                log(linha)
+                houve_diferenca = True
+            if not houve_diferenca:
+                log("Nenhuma diferença encontrada.")
+        else:
+            log(f"[!] Arquivo ausente em uma das pastas: {nome_arquivo}")
 
 def carregar_equipamentos():
     if not os.path.exists(EQUIPAMENTOS_FILE):
@@ -360,12 +417,16 @@ btn_backup = tk.Button(frame_botoes, text="Executar Backup (Múltiplos)", comman
     ) if lista.curselection() else messagebox.showwarning("Atenção", "Selecione pelo menos um equipamento!")
 ))
 btn_ver_backups = tk.Button(frame_botoes, text="Ver Backups", command=exibir_backups)
+btn_comparar = tk.Button(frame_botoes, text="Comparar Backups", command=comparar_backups_ui)
+
+
 
 # Empilha os botões verticalmente
 btn_cadastrar.pack(fill="x", pady=2)
 btn_editar.pack(fill="x", pady=2)
 btn_backup.pack(fill="x", pady=2)
 btn_ver_backups.pack(fill="x", pady=2)
+btn_comparar.pack(fill="x", pady=2)
 
 atualizar_lista()
 root.mainloop()
