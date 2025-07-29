@@ -306,10 +306,10 @@ def exibir_backups():
 
 def executar_backup_thread(equip, text_widget, janela_log, callback):
     try:
-        jump_host = "45.167.183.21"
-        jump_port = 22587
-        jump_user = "noc.psne"
-        jump_pass = "Qwe@1234!"
+        jump_host = "100.100.100.80"
+        jump_port = 22
+        jump_user = "user"
+        jump_pass = "password"
 
         def log(msg):
             text_widget.insert(tk.END, msg + "\n")
