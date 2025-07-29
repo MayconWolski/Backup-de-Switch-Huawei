@@ -1,14 +1,17 @@
 [
     {
-        "nome": "RTARATP2",
-        "ip": "172.17.100.7",
-        "usuario": "noc.psne",
+        "nome": "SWARA",
+        "ip": "100.100.100.1",
+        "usuario": "user",
         "senha": "UXdlQDEyM0AzMjE="
     },
     {
-        "nome": "RTITUTP1",
-        "ip": "172.17.100.11",
-        "usuario": "noc.psne",
+        "nome": "SWITU",
+        "ip": "100.100.100.2",
+        "usuario": "user",
         "senha": "UXdlQDEyM0AzMjE="
     }
 ]
+
+
+
