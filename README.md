@@ -1,6 +1,4 @@
-<<<<<<< HEAD
-429: Too Many Requests
-=======
+
 # Esse projeto foi desenvolvido com o objetivo de realizar backups de switches Huawei, mantendo um histórico de atividades.
 
 Ele também conta com uma ferramenta de comparação entre os dois últimos backups, permitindo identificar eventuais diferenças após atualizações no equipamento e verificar se todas as configurações foram mantidas corretamente.
