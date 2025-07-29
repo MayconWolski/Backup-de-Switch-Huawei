@@ -3,6 +3,9 @@
 
 Ele também conta com uma ferramenta de comparação entre os dois últimos backups, permitindo identificar eventuais diferenças após atualizações no equipamento e verificar se todas as configurações foram mantidas corretamente.
 
+🛠️ Tecnologias utilizadas:
+Python, Tkinter, Paramiko, SQLite, Cryptography
+
 # Parte visual principal:
 
 <img width="829" height="523" alt="image" src="https://github.com/user-attachments/assets/d7b25881-aab1-4092-8c38-4f9412b14f79" />
